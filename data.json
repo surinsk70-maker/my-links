@@ -1,0 +1,35 @@
+{
+  "siteTitle": "🔗 Link Hub",
+  "categories": [
+    {
+      "id": "work",
+      "name": "🏢 งาน",
+      "color": "#3B82F6",
+      "links": [
+        { "id": "lk01", "title": "Google Drive", "url": "https://drive.google.com", "desc": "ไฟล์และเอกสาร" },
+        { "id": "lk02", "title": "Gmail", "url": "https://mail.google.com", "desc": "อีเมล" },
+        { "id": "lk03", "title": "Google Calendar", "url": "https://calendar.google.com", "desc": "ตารางนัดหมาย" }
+      ]
+    },
+    {
+      "id": "social",
+      "name": "💬 โซเชียล",
+      "color": "#8B5CF6",
+      "links": [
+        { "id": "lk04", "title": "Facebook", "url": "https://facebook.com", "desc": "เฟซบุ๊ก" },
+        { "id": "lk05", "title": "LINE", "url": "https://line.me", "desc": "แชท" },
+        { "id": "lk06", "title": "Instagram", "url": "https://instagram.com", "desc": "รูปภาพ" }
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "🛠️ เครื่องมือ",
+      "color": "#10B981",
+      "links": [
+        { "id": "lk07", "title": "ChatGPT", "url": "https://chat.openai.com", "desc": "AI ช่วยงาน" },
+        { "id": "lk08", "title": "Canva", "url": "https://canva.com", "desc": "ออกแบบกราฟิก" },
+        { "id": "lk09", "title": "Notion", "url": "https://notion.so", "desc": "จัดการโน้ต" }
+      ]
+    }
+  ]
+}

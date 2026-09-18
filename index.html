@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Link Hub — รวมลิงก์ที่ใช้บ่อย</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans Thai',-apple-system,BlinkMacSystemFont,sans-serif;background:#0B0F1A;color:#E2E8F0;min-height:100vh;-webkit-user-select:none;user-select:none}
+a{text-decoration:none;color:inherit}
+input,select,button,textarea{font-family:inherit;-webkit-user-select:text;user-select:text}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#1E293B;border-radius:3px}
+
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-30px) scale(1.1)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-30px,40px) scale(1.15)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(100%)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+.orb1{position:fixed;top:-120px;right:-120px;width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:float1 20s ease-in-out infinite}
+.orb2{position:fixed;bottom:-100px;left:-100px;width:350px;height:350px;background:radial-gradient(circle,rgba(139,92,246,.10) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:float2 25s ease-in-out infinite}
+
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 100px;position:relative;z-index:1}
+
+.header{text-align:center;margin-bottom:28px;animation:fadeIn .6s ease-out}
+.clock{font-size:clamp(36px,8vw,48px);font-weight:700;letter-spacing:2px;color:#F8FAFC}
+.date{font-size:14px;color:#64748B;margin-top:2px}
+.greet{font-size:clamp(18px,5vw,24px);font-weight:600;color:#F1F5F9;margin:12px 0 4px}
+.sub{font-size:14px;color:#64748B}
+
+.search-w{position:relative;max-width:480px;margin:0 auto 20px;animation:fadeIn .6s ease-out .1s both}
+.search-w .ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none}
+.search-w input{width:100%;padding:14px 44px;font-size:15px;background:#111827;border:1px solid #1E293B;border-radius:14px;color:#E2E8F0;outline:none;transition:border-color .2s}
+.search-w input:focus{border-color:#3B82F6}
+.search-w .clr{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:#1E293B;border:none;color:#94A3B8;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:12px;display:none;align-items:center;justify-content:center}
+.search-w .clr.on{display:flex}
+
+.cf{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:28px;scrollbar-width:none;animation:fadeIn .6s ease-out .15s both}
+.cf::-webkit-scrollbar{display:none}
+.cp{padding:8px 16px;border-radius:20px;border:1px solid #1E293B;background:#111827;color:#94A3B8;font-size:13px;cursor:pointer;white-space:nowrap;transition:all .2s;font-weight:500}
+.cp:hover{border-color:#334155}
+.cp.on{background:rgba(59,130,246,.13);border-color:#3B82F6;color:#3B82F6}
+
+.sec{margin-bottom:32px;animation:fadeIn .5s ease-out both}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sd{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.st{font-size:16px;font-weight:600;color:#CBD5E1;white-space:nowrap}
+.sl{flex:1;height:1px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:#111827;border:1px solid #1E293B;border-radius:14px;padding:16px;transition:all .25s ease;box-shadow:0 2px 12px rgba(0,0,0,.2);cursor:pointer;display:block}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(59,130,246,.12);border-color:rgba(59,130,246,.3)}
+.ci{display:flex;align-items:center;gap:14px}
+.cico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cico img{width:28px;height:28px;border-radius:4px}
+.ctx{flex:1;min-width:0}
+.ctt{font-size:15px;font-weight:600;color:#F1F5F9;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ctd{font-size:13px;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.car{font-size:18px;color:#475569;flex-shrink:0}
+.card:hover .car{color:#3B82F6}
+
+.empty{text-align:center;color:#475569;padding:24px 0;font-size:14px}
+.norr{text-align:center;color:#475569;padding:60px 20px;font-size:15px}
+.norr i{font-size:48px;margin-bottom:12px;display:block;font-style:normal}
+
+.loading{display:flex;align-items:center;justify-content:center;padding:80px 0;flex-direction:column;gap:16px;color:#64748B}
+.spinner{width:36px;height:36px;border:3px solid #1E293B;border-top-color:#3B82F6;border-radius:50%;animation:spin .8s linear infinite}
+
+.fab{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#8B5CF6);border:none;font-size:24px;cursor:pointer;box-shadow:0 4px 20px rgba(59,130,246,.3);transition:all .25s ease;z-index:100;display:flex;align-items:center;justify-content:center}
+.fab:hover{transform:scale(1.1);box-shadow:0 8px 30px rgba(59,130,246,.4)}
+
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.ov.open{display:flex}
+.mod{background:#0F172A;border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:85vh;overflow-y:auto;padding:24px 20px 40px;border:1px solid #1E293B;border-bottom:none;animation:slideUp .3s ease-out}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.mti{font-size:20px;font-weight:700;color:#F1F5F9}
+.cbtn{background:#1E293B;border:none;color:#94A3B8;width:36px;height:36px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cbtn:hover{background:#334155}
+
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:#111827;border-radius:12px;padding:4px}
+.tab{flex:1;padding:10px 0;border-radius:10px;border:none;background:transparent;color:#94A3B8;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s}
+.tab.on{background:#1E293B;color:#F1F5F9}
+
+.fs{margin-bottom:24px}
+.fl{font-size:15px;font-weight:600;color:#CBD5E1;margin-bottom:12px}
+.inp{width:100%;padding:12px 14px;margin-bottom:10px;background:#111827;border:1px solid #1E293B;border-radius:10px;color:#E2E8F0;font-size:14px;outline:none;transition:border-color .2s}
+.inp:focus{border-color:#3B82F6}
+.abtn{width:100%;padding:12px 0;border-radius:10px;background:linear-gradient(135deg,#3B82F6,#8B5CF6);border:none;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.abtn:hover{opacity:.9}
+.abtn:disabled{opacity:.5;cursor:not-allowed}
+
+.cla{border-left:3px solid;padding-left:10px;font-size:14px;font-weight:600;color:#CBD5E1;margin-bottom:8px}
+.ar{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#111827;border-radius:10px;margin-bottom:6px;border:1px solid #1E293B}
+.alt{font-size:14px;font-weight:500;color:#E2E8F0}
+.alu{font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dbtn{padding:6px 14px;border-radius:8px;border:1px solid #7F1D1D;background:rgba(127,29,29,.2);color:#FCA5A5;font-size:13px;cursor:pointer;flex-shrink:0;font-weight:500}
+.dbtn:hover{background:rgba(127,29,29,.4)}
+.etx{color:#475569;font-size:13px;padding-left:14px;margin-bottom:8px}
+
+.flash{padding:10px 16px;border-radius:10px;background:#1E293B;color:#E2E8F0;font-size:14px;text-align:center;margin-bottom:16px;animation:fadeIn .3s ease-out}
+.flash.err{border:1px solid #7F1D1D;color:#FCA5A5}
+.flash.ok{border:1px solid #065F46;color:#6EE7B7}
+
+.login-box{text-align:center;padding:30px 20px}
+.login-box .inp{max-width:340px;margin:0 auto 10px;text-align:center}
+.login-icon{font-size:32px;margin-bottom:8px}
+.login-sub{color:#64748B;font-size:14px;margin-bottom:20px}
+.login-err{color:#FCA5A5;font-size:13px;margin-top:10px}
+
+.setup-info{background:#111827;border:1px solid #1E293B;border-radius:12px;padding:16px;margin-bottom:16px;font-size:13px;color:#94A3B8;line-height:1.7}
+.setup-info b{color:#E2E8F0;font-weight:600}
+.setup-info code{background:#0F172A;padding:2px 6px;border-radius:4px;color:#7DD3FC;font-size:12px;word-break:break-all}
+.setup-info a{color:#60A5FA;text-decoration:underline}
+
+.colp{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.colp label{color:#94A3B8;font-size:14px}
+.colp input[type=color]{width:48px;height:36px;border:none;border-radius:8px;cursor:pointer;background:transparent}
+
+.save-bar{position:sticky;bottom:0;padding:12px 0;background:linear-gradient(transparent,#0F172A 30%);display:none;z-index:10}
+.save-bar.on{display:block}
+.save-bar .abtn{box-shadow:0 -4px 20px rgba(0,0,0,.5)}
+
+.bw{position:fixed;inset:0;background:#0B0F1A;z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#64748B;font-size:15px}
+.bw.on{display:flex}
+.bw span{font-size:48px}
+
+@media(max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .wrap{padding:20px 12px 100px}
+}
+</style>
+</head>
+<body>
+
+<div class="orb1"></div>
+<div class="orb2"></div>
+<div class="wrap" id="app"><div class="loading"><div class="spinner"></div>กำลังโหลดข้อมูล...</div></div>
+<button class="fab" id="fabBtn">⚙️</button>
+<div class="ov" id="ov"><div class="mod" id="mod"></div></div>
+<div class="bw" id="bw"><span>🔒</span><div>ไม่สามารถใช้งาน Developer Tools ได้</div><div style="font-size:13px;color:#475569">กรุณาปิด DevTools แล้วรีเฟรชหน้าเว็บ</div></div>
+
+<script>
+// ══════════════════════════════════════
+//  🔒 PROTECTION
+// ══════════════════════════════════════
+document.addEventListener('contextmenu',function(e){e.preventDefault()});
+document.addEventListener('keydown',function(e){
+  if(e.key==='F12'){e.preventDefault();return false}
+  if((e.ctrlKey||e.metaKey)&&e.shiftKey&&'IJCijc'.indexOf(e.key)!==-1){e.preventDefault();return false}
+  if((e.ctrlKey||e.metaKey)&&'uUsS'.indexOf(e.key)!==-1){e.preventDefault();return false}
+});
+(function(){var d=!1,el=new Image;Object.defineProperty(el,'id',{get:function(){d=!0}});setInterval(function(){d=!1;console.log('%c',el);var w=window.outerWidth-window.innerWidth>160,h=window.outerHeight-window.innerHeight>160;document.getElementById('bw').classList.toggle('on',d||w||h)},1500)})();
+document.addEventListener('dragstart',function(e){e.preventDefault()});
+
+
+// ══════════════════════════════════════
+//  📦 CONFIG & STATE
+// ══════════════════════════════════════
+//
+//  ★ สถาปัตยกรรม:
+//  ┌─────────────────┐      ┌──────────────────┐
+//  │  index.html      │ ───► │  data.json        │
+//  │  (หน้าเว็บ)      │ fetch│  (ข้อมูลลิงก์)     │
+//  └─────────────────┘      └──────────────────┘
+//           │                        ▲
+//           │ Admin Panel            │ GitHub API
+//           │ เพิ่ม/ลบลิงก์           │ commit ไฟล์
+//           ▼                        │
+//  ┌─────────────────────────────────┘
+//  │  GitHub Repository (your-name/your-repo)
+//  │  ใช้ Personal Access Token (PAT)
+//  └─────────────────────────────────
+//
+//  ★ ผู้ใช้ทั่วไป: เห็นลิงก์จาก data.json
+//  ★ แอดมิน: login → เพิ่ม/ลบ → กด Save → commit กลับไป repo
+//  ★ GitHub Pages จะ deploy อัตโนมัติ (~30 วินาที)
+//
+
+var data = null;
+var searchTerm = "";
+var activeCat = "all";
+var adminTab = "links";
+var isAuth = false;
+var dirty = false; // มีการเปลี่ยนแปลงที่ยังไม่ save
+var saving = false;
+
+// GitHub config (แอดมินตั้งค่าตอน login)
+var gh = {
+  token: localStorage.getItem('_ght') || '',
+  owner: localStorage.getItem('_gho') || '',
+  repo:  localStorage.getItem('_ghr') || '',
+  branch: localStorage.getItem('_ghb') || 'main',
+  path:  'data.json',
+  sha:   '' // จะได้ตอน fetch
+};
+
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7) }
+function esc(s){ var d=document.createElement('div');d.textContent=s;return d.innerHTML }
+function fav(u){ try{return "https://www.google.com/s2/favicons?domain="+new URL(u).hostname+"&sz=64"}catch(e){return null} }
+
+
+// ══════════════════════════════════════
+//  📡 DATA: FETCH & SAVE via GitHub API
+// ══════════════════════════════════════
+
+// โหลดข้อมูลจาก data.json (relative path — ทำงานทั้ง local และ GitHub Pages)
+async function fetchData(){
+  try {
+    var r = await fetch('data.json?t='+Date.now());
+    if(!r.ok) throw new Error(r.status);
+    data = await r.json();
+    render();
+  } catch(e){
+    document.getElementById('app').innerHTML =
+      '<div class="norr"><i>⚠️</i>ไม่สามารถโหลด data.json ได้<br><span style="font-size:13px;color:#475569">'+esc(e.message)+'</span></div>';
+  }
+}
+
+// อ่าน SHA ของ data.json จาก GitHub API (จำเป็นสำหรับ update)
+async function getFileSha(){
+  var url = 'https://api.github.com/repos/'+gh.owner+'/'+gh.repo+'/contents/'+gh.path+'?ref='+gh.branch;
+  var r = await fetch(url, { headers: { 'Authorization':'Bearer '+gh.token, 'Accept':'application/vnd.github+json' }});
+  if(!r.ok) throw new Error('ไม่สามารถอ่าน repo ได้ ('+r.status+')');
+  var j = await r.json();
+  gh.sha = j.sha;
+  return j;
+}
+
+// บันทึก data.json กลับไป GitHub repo
+async function saveToGithub(){
+  if(saving) return;
+  saving = true;
+  renderAP();
+  try {
+    await getFileSha(); // get latest sha
+    var content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    var url = 'https://api.github.com/repos/'+gh.owner+'/'+gh.repo+'/contents/'+gh.path;
+    var r = await fetch(url, {
+      method: 'PUT',
+      headers: { 'Authorization':'Bearer '+gh.token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        message: 'Update links via Link Hub Admin',
+        content: content,
+        sha: gh.sha,
+        branch: gh.branch
+      })
+    });
+    if(!r.ok){
+      var err = await r.json();
+      throw new Error(err.message || r.status);
+    }
+    dirty = false;
+    saving = false;
+    renderAP();
+    adminFlash('✅ บันทึกสำเร็จ! หน้าเว็บจะอัปเดตใน ~30 วินาที','ok');
+  } catch(e){
+    saving = false;
+    renderAP();
+    adminFlash('❌ บันทึกล้มเหลว: '+e.message,'err');
+  }
+}
+
+
+// ══════════════════════════════════════
+//  ⏰ TIME
+// ══════════════════════════════════════
+function getG(){var h=new Date().getHours();if(h<6)return"🌙 สวัสดีดึก";if(h<12)return"☀️ สวัสดีตอนเช้า";if(h<17)return"🌤️ สวัสดีตอนบ่าย";return"🌆 สวัสดีตอนเย็น"}
+function getT(){return new Date().toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"})}
+function getD(){return new Date().toLocaleDateString("th-TH",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
+setInterval(function(){var c=document.getElementById('clock'),d=document.getElementById('dateStr');if(c)c.textContent=getT();if(d)d.textContent=getD()},30000);
+
+
+// ══════════════════════════════════════
+//  🖥️ RENDER MAIN PAGE
+// ══════════════════════════════════════
+function render(){
+  if(!data) return;
+  var tl=data.categories.reduce(function(s,c){return s+c.links.length},0);
+  var fil=data.categories
+    .filter(function(c){return activeCat==="all"||c.id===activeCat})
+    .map(function(c){return{id:c.id,name:c.name,color:c.color,links:c.links.filter(function(l){
+      if(!searchTerm)return true;var q=searchTerm.toLowerCase();
+      return l.title.toLowerCase().indexOf(q)!==-1||(l.desc||"").toLowerCase().indexOf(q)!==-1||l.url.toLowerCase().indexOf(q)!==-1;
+    })}})
+    .filter(function(c){return c.links.length>0||!searchTerm});
+
+  var h='<header class="header"><div class="clock" id="clock">'+getT()+'</div><div class="date" id="dateStr">'+getD()+'</div><h1 class="greet">'+getG()+'</h1><p class="sub">คุณมี '+tl+' ลิงก์ ใน '+data.categories.length+' หมวด</p></header>';
+  h+='<div class="search-w"><span class="ico">🔍</span><input id="si" placeholder="ค้นหาลิงก์..." value="'+esc(searchTerm)+'"><button class="clr '+(searchTerm?'on':'')+'" id="sc">✕</button></div>';
+  h+='<div class="cf"><button class="cp '+(activeCat==='all'?'on':'')+'" data-c="all">ทั้งหมด</button>';
+  data.categories.forEach(function(c){
+    var s=activeCat===c.id?'style="background:'+c.color+'22;border-color:'+c.color+';color:'+c.color+'"':'';
+    h+='<button class="cp '+(activeCat===c.id?'on':'')+'" data-c="'+c.id+'" '+s+'>'+esc(c.name)+'</button>';
+  });
+  h+='</div>';
+
+  if(fil.length===0&&searchTerm){
+    h+='<div class="norr"><i>🔍</i>ไม่พบลิงก์ที่ตรงกับ "'+esc(searchTerm)+'"</div>';
+  } else {
+    fil.forEach(function(cat){
+      h+='<section class="sec"><div class="sh"><div class="sd" style="background:'+cat.color+'"></div><h2 class="st">'+esc(cat.name)+'</h2><div class="sl" style="background:linear-gradient(90deg,'+cat.color+'44,transparent)"></div></div>';
+      if(cat.links.length===0){h+='<div class="empty">ยังไม่มีลิงก์ในหมวดนี้</div>';}else{
+        h+='<div class="grid">';
+        cat.links.forEach(function(l){
+          var f=fav(l.url);
+          h+='<a class="card" href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer"><div class="ci"><div class="cico" style="background:'+cat.color+'18">';
+          if(f)h+='<img src="'+f+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"><span style="display:none;font-size:22px">🔗</span>';
+          else h+='<span style="font-size:22px">🔗</span>';
+          h+='</div><div class="ctx"><div class="ctt">'+esc(l.title)+'</div>';
+          if(l.desc)h+='<div class="ctd">'+esc(l.desc)+'</div>';
+          h+='</div><div class="car">→</div></div></a>';
+        });
+        h+='</div>';
+      }
+      h+='</section>';
+    });
+  }
+
+  document.getElementById('app').innerHTML=h;
+  var si=document.getElementById('si');
+  if(si){si.addEventListener('input',function(e){searchTerm=e.target.value;render()});si.focus();si.setSelectionRange(si.value.length,si.value.length)}
+  document.getElementById('sc')&&document.getElementById('sc').addEventListener('click',function(){searchTerm='';render()});
+  document.querySelectorAll('.cp').forEach(function(b){b.addEventListener('click',function(){activeCat=b.dataset.c;render()})});
+}
+
+
+// ══════════════════════════════════════
+//  🔧 ADMIN PANEL
+// ══════════════════════════════════════
+function openAdmin(){if(!isAuth){renderLogin()}else{renderAP()} document.getElementById('ov').classList.add('open')}
+function closeAdmin(){document.getElementById('ov').classList.remove('open')}
+
+function renderLogin(){
+  var m=document.getElementById('mod');
+  var hasConfig = gh.token && gh.owner && gh.repo;
+  m.innerHTML = '<div class="mh"><h2 class="mti">🔐 เข้าสู่ระบบแอดมิน</h2><button class="cbtn" id="cm">✕</button></div>'
+    + '<div class="login-box">'
+    + '<div class="login-icon">🔒</div>'
+    + '<div class="login-sub">ตั้งค่า GitHub เพื่อจัดการลิงก์</div>'
+    + '<div class="setup-info">'
+    + '<b>วิธีสร้าง Personal Access Token:</b><br>'
+    + '1. ไปที่ <a href="https://github.com/settings/tokens?type=beta" target="_blank">GitHub → Settings → Tokens</a><br>'
+    + '2. กด <b>Generate new token (Fine-grained)</b><br>'
+    + '3. เลือก repo ของคุณ ให้สิทธิ์ <b>Contents: Read & Write</b><br>'
+    + '4. คัดลอก token มาวางข้างล่าง'
+    + '</div>'
+    + '<input class="inp" id="gho" placeholder="GitHub Username (เช่น myname)" value="'+esc(gh.owner)+'">'
+    + '<input class="inp" id="ghr" placeholder="Repository Name (เช่น my-links)" value="'+esc(gh.repo)+'">'
+    + '<input class="inp" id="ghb" placeholder="Branch (ค่าเริ่มต้น: main)" value="'+esc(gh.branch||'main')+'">'
+    + '<input class="inp" type="password" id="ght" placeholder="GitHub Personal Access Token" value="'+esc(gh.token)+'">'
+    + '<button class="abtn" id="lbtn">เชื่อมต่อ & เข้าสู่ระบบ</button>'
+    + '<div class="login-err" id="lerr"></div>'
+    + '</div>';
+
+  document.getElementById('cm').addEventListener('click',closeAdmin);
+  document.getElementById('lbtn').addEventListener('click',async function(){
+    var btn=this;
+    btn.disabled=true; btn.textContent='กำลังตรวจสอบ...';
+    gh.owner=document.getElementById('gho').value.trim();
+    gh.repo=document.getElementById('ghr').value.trim();
+    gh.branch=document.getElementById('ghb').value.trim()||'main';
+    gh.token=document.getElementById('ght').value.trim();
+    if(!gh.owner||!gh.repo||!gh.token){
+      document.getElementById('lerr').textContent='⚠️ กรุณากรอกข้อมูลให้ครบ';
+      btn.disabled=false;btn.textContent='เชื่อมต่อ & เข้าสู่ระบบ';return;
+    }
+    try{
+      await getFileSha();
+      // save config to localStorage (token stays only in admin's browser)
+      localStorage.setItem('_ght',gh.token);
+      localStorage.setItem('_gho',gh.owner);
+      localStorage.setItem('_ghr',gh.repo);
+      localStorage.setItem('_ghb',gh.branch);
+      isAuth=true;
+      renderAP();
+    }catch(e){
+      document.getElementById('lerr').textContent='❌ '+e.message;
+      btn.disabled=false;btn.textContent='เชื่อมต่อ & เข้าสู่ระบบ';
+    }
+  });
+}
+
+function adminFlash(msg,type){
+  var el=document.getElementById('af');
+  if(!el) return;
+  el.className='flash'+(type?' '+type:'');
+  el.textContent=msg;
+  el.style.display='block';
+  if(type!=='err') setTimeout(function(){el.style.display='none'},3000);
+}
+
+function renderAP(){
+  var m=document.getElementById('mod');
+  var h='<div class="mh"><h2 class="mti">🔧 จัดการลิงก์</h2><button class="cbtn" id="cm">✕</button></div>'
+    +'<div class="flash" id="af" style="display:none"></div>'
+    +'<div class="tabs"><button class="tab '+(adminTab==='links'?'on':'')+'" data-t="links">จัดการลิงก์</button><button class="tab '+(adminTab==='cats'?'on':'')+'" data-t="cats">จัดการหมวด</button><button class="tab '+(adminTab==='settings'?'on':'')+'" data-t="settings">ตั้งค่า</button></div>';
+
+  if(adminTab==='links'){
+    h+='<div class="fs"><div class="fl">เพิ่มลิงก์ใหม่</div><select class="inp" id="aC"><option value="">— เลือกหมวด —</option>';
+    data.categories.forEach(function(c){h+='<option value="'+c.id+'">'+esc(c.name)+'</option>'});
+    h+='</select><input class="inp" id="aT" placeholder="ชื่อลิงก์"><input class="inp" id="aU" placeholder="URL (เช่น google.com)"><input class="inp" id="aD" placeholder="คำอธิบาย (ไม่บังคับ)"><button class="abtn" id="alb">＋ เพิ่มลิงก์</button></div>';
+    h+='<div class="fs"><div class="fl">ลิงก์ทั้งหมด</div>';
+    data.categories.forEach(function(cat){
+      h+='<div style="margin-bottom:16px"><div class="cla" style="border-left-color:'+cat.color+'">'+esc(cat.name)+'</div>';
+      if(cat.links.length===0)h+='<div class="etx">ยังไม่มีลิงก์</div>';
+      else cat.links.forEach(function(l){
+        h+='<div class="ar"><div style="flex:1;min-width:0"><div class="alt">'+esc(l.title)+'</div><div class="alu">'+esc(l.url)+'</div></div><button class="dbtn" data-dc="'+cat.id+'" data-dl="'+l.id+'">ลบ</button></div>';
+      });
+      h+='</div>';
+    });
+    h+='</div>';
+  } else if(adminTab==='cats'){
+    h+='<div class="fs"><div class="fl">เพิ่มหมวดใหม่</div><input class="inp" id="aCN" placeholder="ชื่อหมวด (เช่น 📚 การเรียน)"><div class="colp"><label>สี:</label><input type="color" id="aCC" value="#3B82F6"></div><button class="abtn" id="acb">＋ เพิ่มหมวด</button></div>';
+    h+='<div class="fs"><div class="fl">หมวดทั้งหมด</div>';
+    data.categories.forEach(function(cat){
+      h+='<div class="ar"><div style="display:flex;align-items:center;gap:10px;flex:1"><div style="width:16px;height:16px;border-radius:4px;background:'+cat.color+';flex-shrink:0"></div><span style="color:#E2E8F0">'+esc(cat.name)+'</span><span style="color:#64748B;font-size:13px">('+cat.links.length+' ลิงก์)</span></div><button class="dbtn" data-dco="'+cat.id+'">ลบ</button></div>';
+    });
+    h+='</div>';
+  } else {
+    h+='<div class="fs"><div class="fl">การเชื่อมต่อ GitHub</div>'
+      +'<div class="setup-info" style="margin-bottom:16px"><b>สถานะ:</b> ✅ เชื่อมต่อแล้ว<br><b>Repo:</b> <code>'+esc(gh.owner)+'/'+esc(gh.repo)+'</code><br><b>Branch:</b> <code>'+esc(gh.branch)+'</code></div>'
+      +'<button class="abtn" id="lgout" style="background:#7F1D1D">ออกจากระบบ & ลบ Token</button></div>';
+  }
+
+  // Save bar
+  h+='<div class="save-bar '+(dirty?'on':'')+'" id="sbar"><button class="abtn" id="sbtn" '+(saving?'disabled':'')+'>💾 '+(saving?'กำลังบันทึก...':'บันทึกขึ้น GitHub ('+gh.owner+'/'+gh.repo+')')+'</button></div>';
+
+  m.innerHTML=h;
+
+  // bind
+  document.getElementById('cm').addEventListener('click',closeAdmin);
+  document.querySelectorAll('.tab').forEach(function(t){t.addEventListener('click',function(){adminTab=t.dataset.t;renderAP()})});
+  document.getElementById('sbtn')&&document.getElementById('sbtn').addEventListener('click',saveToGithub);
+
+  // Add link
+  var alb=document.getElementById('alb');
+  if(alb) alb.addEventListener('click',function(){
+    var cid=document.getElementById('aC').value,ti=document.getElementById('aT').value.trim(),ur=document.getElementById('aU').value.trim(),de=document.getElementById('aD').value.trim();
+    if(!cid||!ti||!ur){adminFlash('⚠️ กรุณากรอกข้อมูลให้ครบ','err');return}
+    if(!/^https?:\/\//.test(ur))ur='https://'+ur;
+    var c=data.categories.find(function(x){return x.id===cid});
+    if(c){c.links.push({id:uid(),title:ti,url:ur,desc:de});dirty=true;render();renderAP();adminFlash('✅ เพิ่มลิงก์แล้ว — อย่าลืมกดบันทึก','ok')}
+  });
+
+  // Delete link
+  document.querySelectorAll('[data-dl]').forEach(function(b){b.addEventListener('click',function(){
+    var c=data.categories.find(function(x){return x.id===b.dataset.dc});
+    if(c){c.links=c.links.filter(function(l){return l.id!==b.dataset.dl});dirty=true;render();renderAP();adminFlash('🗑️ ลบแล้ว — อย่าลืมกดบันทึก','ok')}
+  })});
+
+  // Add category
+  var acb=document.getElementById('acb');
+  if(acb) acb.addEventListener('click',function(){
+    var n=document.getElementById('aCN').value.trim(),co=document.getElementById('aCC').value;
+    if(!n){adminFlash('⚠️ กรุณาใส่ชื่อหมวด','err');return}
+    data.categories.push({id:uid(),name:n,color:co,links:[]});dirty=true;render();renderAP();adminFlash('✅ เพิ่มหมวดแล้ว — อย่าลืมกดบันทึก','ok');
+  });
+
+  // Delete category
+  document.querySelectorAll('[data-dco]').forEach(function(b){b.addEventListener('click',function(){
+    if(!confirm('ลบหมวดนี้และลิงก์ทั้งหมดในหมวด?'))return;
+    data.categories=data.categories.filter(function(c){return c.id!==b.dataset.dco});dirty=true;render();renderAP();adminFlash('🗑️ ลบหมวดแล้ว — อย่าลืมกดบันทึก','ok');
+  })});
+
+  // Logout
+  var lgout=document.getElementById('lgout');
+  if(lgout) lgout.addEventListener('click',function(){
+    if(!confirm('ออกจากระบบ? Token จะถูกลบจาก browser นี้'))return;
+    localStorage.removeItem('_ght');localStorage.removeItem('_gho');localStorage.removeItem('_ghr');localStorage.removeItem('_ghb');
+    gh={token:'',owner:'',repo:'',branch:'main',path:'data.json',sha:''};
+    isAuth=false;adminTab='links';closeAdmin();
+  });
+}
+
+
+// ══════════════════════════════════════
+//  🚀 INIT
+// ══════════════════════════════════════
+document.getElementById('fabBtn').addEventListener('click',openAdmin);
+document.getElementById('ov').addEventListener('click',function(e){if(e.target===e.currentTarget)closeAdmin()});
+fetchData();
+</script>
+</body>
+</html>
