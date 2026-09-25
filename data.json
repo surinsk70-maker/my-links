@@ -104,7 +104,14 @@
       "id": "muge67kyfk3cr",
       "name": "งานควบคุมโรค",
       "color": "#f76808",
-      "links": []
+      "links": [
+        {
+          "id": "muge84laefnm3",
+          "title": "รายงาน HI CI รายสัปดาห์",
+          "url": "https://docs.google.com/spreadsheets/d/1lcIu27zTCjkuovKWdl3j-qxfAe52U_MftTdwbO4vRco/edit?gid=1160060966#gid=1160060966",
+          "desc": ""
+        }
+      ]
     }
   ]
 }
