@@ -129,7 +129,14 @@
       "id": "mugfdet9vqvpu",
       "name": "งานประกันและการเบิกจ่าย",
       "color": "#09f162",
-      "links": []
+      "links": [
+        {
+          "id": "mugfebqix7y6b",
+          "title": "ติดตามเงินโอน UC +อปท.",
+          "url": "https://smt.nhso.go.th/smtf/#/home/budget/summary",
+          "desc": ""
+        }
+      ]
     }
   ]
 }
