@@ -41,6 +41,12 @@
           "title": "จัดการคิว",
           "url": "https://script.google.com/macros/s/AKfycbz68id33L_uqJJMZ6kvGGDGVnrREABCGIECkDAca8s3on2RQcrQYoE7VQS_6EhAJYBI/exec?page=admin",
           "desc": ""
+        },
+        {
+          "id": "mugdu03x1gbn3",
+          "title": "ส่ง Zero report 506",
+          "url": "https://ddsservice.ddc.moph.go.th/zeroreport/zeroreport/index",
+          "desc": ""
         }
       ]
     },
