@@ -122,6 +122,12 @@
           "title": "สมาทร์ อสม.",
           "url": "https://smart-osm.com/dashboard/#/login",
           "desc": ""
+        },
+        {
+          "id": "muqntabbs3lgl",
+          "title": "ระบบรายงาน506DDS",
+          "url": "https://dds-eservice.moph.go.th/login",
+          "desc": ""
         }
       ]
     },
